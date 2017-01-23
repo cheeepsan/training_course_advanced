@@ -1,0 +1,198 @@
+html,
+body {
+    height: 100%;
+    font-family:'Lato',sans-serif;
+}
+
+a {
+color:#FEB101}
+
+a:active,
+a:focus,
+a:hover {
+    text-decoration:none;
+}
+
+a:hover {
+color: #222;
+}
+
+h1,h2,h3,h4,h5,h6,h7 {
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+td.select-users > div.kv-attribute {
+  display: block !important;
+}
+#course-name {
+  display: block !important;
+}
+
+.assigndiv {
+    border:solid 1px #ccc;
+    padding:1px;
+}
+
+.assigndiv h3 {
+    background:#222;
+    padding:10px 12px;
+    margin-top:0;
+    color:#FFF;
+    margin-bottom:0px;
+}
+
+.navbar-default {
+    background-color: #f2f2f2;
+}
+
+.assigndiv  > div {
+    padding:10px;
+}
+
+.navbar-brand > img {
+    margin-left:-10px;
+    margin-top:6px;
+}
+
+.navbar-nav > li > a {
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    padding: 21px 16px;
+    font-weight:400;
+    font-size:15px;
+    }
+    
+ .navbar-nav > li:last-child > form > button {
+ background:#FF9A00;
+ padding:28px 14px 14px 14px;
+ border-radius: 0 0 10px 10px;
+ margin-top:-20px;
+ color:#FFF;
+ font-family:'Oswald';
+ }
+div.assigment-pic.background {
+    padding-bottom: 60%;
+    background-repeat: no-repeat;
+    background-size: contain !important;
+
+}
+a.btn-front-page {
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    padding: 10px 0px;
+    border-top: 1px solid #ccc;
+}
+p.btn-wrap {
+    border-top: 1px solid #ccc;
+    text-align: center;
+    padding-top: 10px;
+}
+/*
+div.wrapper-assigment {
+    border: 1px solid #ccc;
+    min-height: 250px;
+}
+div.wrapper-assigment > div.wrapper-assigment-inner {
+    padding: 10px;
+    min-height: inherit;
+    text-align: center;
+}
+
+
+div.wrapper-assigment > div.wrapper-assigment-inner > div{
+    border: 1px solid #ccc;
+}
+
+div.wrapper-assigment > div.wrapper-assigment-inner > div.picture{
+    min-height: 100px;
+}*/

@@ -1,0 +1,21 @@
+﻿<?php
+namespace app\widgets\latestAssigment;
+
+use yii\base\Widget;
+use yii\helpers\Html;
+
+    class LatestAssigmentWidget extends Widget
+    {
+
+        public function init()
+        {
+            parent::init();
+            
+        }
+
+        public function run()
+        {
+            // return Html::encode($this->message);
+            return $this->render('index');
+        }
+    }
