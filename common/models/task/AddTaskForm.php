@@ -21,7 +21,6 @@ class AddTaskForm extends Model
     public $parent_id;
 
 
-
     /**
      * @return array the validation rules.
      */
@@ -33,30 +32,31 @@ class AddTaskForm extends Model
             [['name', 'status'], 'required'],
             [['create_date', 'publish_date'], 'date'],
             // rememberMe must be a boolean value
-          //  ['rememberMe', 'boolean'],
+            //  ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
-          //  ['password', 'validatePassword'],
+            //  ['password', 'validatePassword'],
         ];
     }
 
-    public function addNewTask() {
-      $task = new Task();
+    public function addNewTask()
+    {
+        $task = new Task();
 
-    //  if(Task::findById($this->id) == NULL) {
+        //  if(Task::findById($this->id) == NULL) {
 
-          $task->name = $this->name;
-          $task->description = $this->description;
-          $task->status = $this->status;
-          $task->create_date = $this->create_date;
-          $task->publish_date = $this->publish_date;
-          $task->parent_id = $this->parent_id;
+        $task->name = $this->name;
+        $task->description = $this->description;
+        $task->status = $this->status;
+        $task->create_date = $this->create_date;
+        $task->publish_date = $this->publish_date;
+        $task->parent_id = $this->parent_id;
 
 
         //  echo '<pre>';var_dump($course); die();
-          return $task->save();
-    //  }
+        return $task->save();
+        //  }
 
-    //  return false;
+        //  return false;
 
     }
 

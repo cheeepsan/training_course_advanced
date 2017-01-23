@@ -9,7 +9,7 @@ use yii\web\Controller;
 use common\models\task\AddTaskForm;
 use common\models\task\Task;
 use common\models\task\TaskSearch;
-
+use yii\web\UploadedFile;
 class TaskController extends Controller
 {
     /**
@@ -79,6 +79,20 @@ class TaskController extends Controller
 
         }
         return $this->render('addTask', [
+            'model' => $model,
+        ]);
+    }
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if (Yii::$app->request->isPost) {
+            $model->files = UploadedFile::getInstance($model, 'files');
+            if ($model->upload()) {
+                $model->save();
+                Yii::$app->session->setFlash('success', 'Task updated');
+            }
+        }
+        return $this->render('updateTask', [
             'model' => $model,
         ]);
     }

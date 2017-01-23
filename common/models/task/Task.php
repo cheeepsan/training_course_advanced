@@ -3,6 +3,8 @@
 namespace common\models\task;
 
 use Yii;
+use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "tbl_Task".
@@ -16,6 +18,7 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    public $files;
     /**
      * @inheritdoc
      */
@@ -31,10 +34,11 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['name',], 'required'],
-            [['description'], 'string'],
+            [['description', 'upload'], 'string'],
             [['status', 'parent_id'], 'integer'],
             [['create_date', 'publish_date'], 'safe'],
             [['name'], 'string', 'max' => 255],
+            [['files'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf, png, jpg'],
         ];
     }
 
@@ -59,6 +63,16 @@ class Task extends \yii\db\ActiveRecord
       return Task::find()->where(['id' => id])->one();
     }
 
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->files->saveAs('uploads/' . $this->files->baseName . '.' . $this->files->extension);
+           //var_dump($this->files);
+            return true;
+        } else {
+            return false;
+        }
+    }
     /**
      * @inheritdoc
      */

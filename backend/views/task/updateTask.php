@@ -7,9 +7,9 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
+use kartik\widgets\FileInput;
 
-
-$this->title = 'New task';
+$this->title = 'Update task';
 if (Yii::$app->session->hasFlash('success')) {
     echo '<div class="alert" style="background: #E0FFE0">' . Yii::$app->session->getFlash('success') . '</div>';
 }
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'add-course-form',
-        'options' => ['class' => 'form-horizontal'],
+        'options' => ['class' => 'form-horizontal', 'enctype' => 'multipart/form-data'],
         'fieldConfig' => [
             'template' => "{label}\n<div class=\"col-lg-7\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
             'labelOptions' => ['class' => 'col-lg-1 control-label'],
@@ -37,15 +37,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'status')->radioList([0 => 'Not active', 1 => 'Active']) ?>
     <?= $form->field($model, 'create_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
     <?= $form->field($model, 'publish_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
+    <?= $form->field($model, 'files')->widget(FileInput::classname(), [
+        'options' => ['multiple' => false],
+        /*'pluginOptions' => [
+            'uploadUrl' => Url::to(['/site/file-upload']),
+            'uploadExtraData' => [
+                'album_id' => 20,
+                'cat_id' => 'Nature'
+            ],
+           ]*/
+
+    ]); ?>
 
 
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Create task', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-        </div>
-    </div>
+    <div class="form-group" >
+        <div class="col-lg-offset-1 col-lg-11" >
+            <?= Html::submitButton('Update task', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+</div>
+</div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 
 </div>
