@@ -13,6 +13,7 @@ use common\models\course\Course;
 use common\models\user\User;
 use common\models\course\CourseUserMap;
 use yii\helpers\ArrayHelper;
+use common\models\task\TaskSubmit;
 class TaskController extends Controller
 {
     /**
@@ -110,4 +111,50 @@ class TaskController extends Controller
 
     }
 
+    public function actionCompleteTask($id = NULL) {
+        //if ($id == NULL) {
+
+        //}
+        $model = TaskSubmit::findIdentity($id);
+        $task = Task::findIdentity($model->parent_id);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $model->done = 1;
+            $model->done_date = Yii::$app->formatter->asDate('now');
+            if ($model->save()) {
+
+            } else {
+                var_dump($model->getErrors()); die();
+                Yii::$app->session->setFlash('danger', 'Task not saved');
+                return $this->redirect(['task/list-all-tasks']);
+            }
+            Yii::$app->session->setFlash('success', 'Task completed');
+            return $this->redirect(['task/list-all-tasks']);
+
+        }
+        return $this->render('complete', ['model' => $model, 'task' => $task]);
+
+    }
+    public function actionSaveTask() {
+
+        $model = TaskSubmit::findIdentity(Yii::$app->request->post()['TaskSubmit']['id']);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $model->done = 1;
+            $model->done_date = Yii::$app->formatter->asDate('now');
+            if ($model->save()) {
+
+            } else {
+                var_dump($model->getErrors()); die();
+                Yii::$app->session->setFlash('danger', 'Task not saved');
+                return $this->redirect(['task/list-all-tasks']);
+            }
+            Yii::$app->session->setFlash('success', 'Task completed');
+            return $this->redirect(['task/list-all-tasks']);
+
+        }
+        Yii::$app->session->setFlash('danger', 'Task not saved');
+        return $this->redirect(['task/list-all-tasks']);
+    }
 }

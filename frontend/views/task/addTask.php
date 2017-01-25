@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-new-course">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to add new user:</p>
+
 
     <?php $form = ActiveForm::begin([
         'id' => 'add-course-form',

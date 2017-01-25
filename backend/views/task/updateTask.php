@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ],
     ]);
-
     ?>
 
     <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
@@ -37,17 +36,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'status')->radioList([0 => 'Not active', 1 => 'Active']) ?>
     <?= $form->field($model, 'create_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
     <?= $form->field($model, 'publish_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
-    <?= $form->field($model, 'files')->widget(FileInput::classname(), [
-        'options' => ['multiple' => false],
-        /*'pluginOptions' => [
-            'uploadUrl' => Url::to(['/site/file-upload']),
-            'uploadExtraData' => [
-                'album_id' => 20,
-                'cat_id' => 'Nature'
+    <?php
+    if ($model->upload != null) {
+        echo $form->field($model, 'files')->widget(FileInput::classname(), [
+            'options' => ['multiple' => false],
+            'pluginOptions' => [
+                'initialPreview' =>
+                    Yii::getAlias('@frontend') . '/web' . $model->upload,
             ],
-           ]*/
+        ]);
+    } else {
+        echo $form->field($model, 'files')->widget(FileInput::classname(), [
+            'options' => ['multiple' => false],
 
-    ]); ?>
+
+        ]);
+    }
+
+
+     ?>
 
 
     <div class="form-group" >

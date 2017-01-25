@@ -5,7 +5,8 @@ namespace common\models\task;
 use Yii;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
-
+use common\models\task\TaskSubmit;
+use common\models\course\CourseUserMap;
 /**
  * This is the model class for table "tbl_Task".
  *
@@ -19,6 +20,7 @@ use yii\web\UploadedFile;
 class Task extends \yii\db\ActiveRecord
 {
     public $files;
+
     /**
      * @inheritdoc
      */
@@ -54,25 +56,79 @@ class Task extends \yii\db\ActiveRecord
             'description' => 'Description',
             'status' => 'Status',
             'create_date' => 'Start Date',
-            'publish_date' => 'End Date',
+            'publish_date' => 'Deadline',
 
         ];
     }
 
-    public static function findById($id) {
-      return Task::find()->where(['id' => id])->one();
+    public static function findById($id)
+    {
+        return Task::find()->where(['id' => id])->one();
     }
 
     public function upload()
     {
         if ($this->validate()) {
-            $this->files->saveAs('uploads/' . $this->files->baseName . '.' . $this->files->extension);
-           //var_dump($this->files);
+
+            $this->files = UploadedFile::getInstance($this, 'files');
+            if ($this->files != null) {
+                $this->files->saveAs(Yii::getAlias('@frontend') . '/web/uploads/' . $this->files->baseName . '.' . $this->files->extension);
+
+                $this->upload = '/uploads/' . $this->files->baseName . '.' . $this->files->extension;
+                $this->files = null;
+
+            }
+
             return true;
         } else {
             return false;
         }
     }
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            $submits = TaskSubmit::getAllByParentId($this->id);
+            foreach ($submits as $submit) {
+                $submit->delete();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+           $courseMap = CourseUserMap::findByCourseId($this->parent_id);
+            foreach ($courseMap as $course) {
+                $submitTask = new TaskSubmit(['user_id' => $course->user_id, 'parent_id' => $this->id]);
+                if ($submitTask->save()) {
+                    echo 'te';
+                } else {
+                    print_r($submitTask->getErrors());
+                }
+
+           }
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+
+    }
+
     /**
      * @inheritdoc
      */
@@ -81,12 +137,15 @@ class Task extends \yii\db\ActiveRecord
         return static::findOne($id);
     }
 
-    public static function getAllByParentId($parentId) {
+    public static function getAllByParentId($parentId)
+    {
 
         return Task::find()->where(['parent_id' => $parentId])->all();
     }
-    public static function getLatestTask($parentId) {
-        
+
+    public static function getLatestTask($parentId)
+    {
+
         return Task::find()->where(['parent_id' => $parentId])->orderBy('publish_date DESC')->one();
     }
 }

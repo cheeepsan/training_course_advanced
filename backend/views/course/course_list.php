@@ -48,9 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => '\kartik\grid\ActionColumn',
                 'deleteOptions' => [
                     'label' => '<i class="glyphicon glyphicon-remove"></i>',
-
-
                 ],
+                'updateOptions' => [
+                        'style' => 'display: none',
+                ]
 
             ],
         ],

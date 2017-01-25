@@ -14,9 +14,14 @@ use yii\helpers\ArrayHelper;
 ?>
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <h1><?= $model->name ?> </h1>
+            <p><?= $model->publish_date ?> </p>
             <p><?= $model->description ?></p>
+
+        </div>
+        <div class="col-md-4"  style="border-left: 1px solid #000000">
+
         </div>
     </div>
 </div>

@@ -88,4 +88,7 @@ class User extends \yii\db\ActiveRecord
     {
         return static::findOne(['user_id' => $id]);
     }
+    public static function getUserFromIdentity() {
+        return static::findOne(['user_id' =>  Yii::$app->user->identity->id]);
+    }
 }

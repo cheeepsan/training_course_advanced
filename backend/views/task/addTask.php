@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
+use kartik\widgets\FileInput;
 
 
 $this->title = 'New task';
@@ -38,7 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'create_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
     <?= $form->field($model, 'publish_date')->widget(yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
 
+    <?= $form->field($model, 'files')->widget(FileInput::classname(), [
+    'options' => ['multiple' => false],
 
+
+    ]); ?>
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
             <?= Html::submitButton('Create task', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
