@@ -4,6 +4,7 @@ namespace common\models\task;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+
 class TaskSubmitSearch extends TaskSubmit
 {
 
@@ -13,28 +14,30 @@ class TaskSubmitSearch extends TaskSubmit
     {
 
     }
-    public function search($params, $parent_id = NULL) {
 
-      $query = TaskSubmit::find();
+    public function search($params, $parent_id = NULL)
+    {
 
-      $dataProvider = new ActiveDataProvider([
-        'query' => $query,
+        $query = TaskSubmit::find();
 
-      ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
 
-      // No search? Then return data Provider
-      if (!($this->load($params) && $this->validate())) {
+        ]);
 
-          return $dataProvider;
-      }
+        // No search? Then return data Provider
+        //if (!($this->load($params) && $this->validate())) {
+        //
+        //    return $dataProvider;
+        //}
 
-      // We have to do some search... Lets do some magic
+        // We have to do some search... Lets do some magic
 
-      if (isset($parent_id)) {
-        $query->andFilterWhere(['=', 'parent_id', $parent_id]);
-      }
+        if (isset($parent_id)) {
+            $query->andFilterWhere(['=', 'parent_id', $parent_id]);
+        }
 
 
-      return $dataProvider;
-  }
+        return $dataProvider;
+    }
 }

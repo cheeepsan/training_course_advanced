@@ -68,10 +68,13 @@ class Task extends \yii\db\ActiveRecord
 
     public function upload()
     {
+
         if ($this->validate()) {
 
             $this->files = UploadedFile::getInstance($this, 'files');
+
             if ($this->files != null) {
+
                 $this->files->saveAs(Yii::getAlias('@frontend') . '/web/uploads/' . $this->files->baseName . '.' . $this->files->extension);
 
                 $this->upload = '/uploads/' . $this->files->baseName . '.' . $this->files->extension;
@@ -81,6 +84,7 @@ class Task extends \yii\db\ActiveRecord
 
             return true;
         } else {
+
             return false;
         }
     }

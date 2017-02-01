@@ -118,7 +118,7 @@ class TaskController extends Controller
     {
         $model = new Task();
         $model->parent_id = $parent_id;
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isPost) {
             if ($model->upload()) {
 
                 if ($model->save()) {

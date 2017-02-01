@@ -75,23 +75,24 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $events = array();
-        
+
         $user = User::findByParent(Yii::$app->user->id);
         $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
         foreach ($courseUserMapArray as $courseUserMap) {
             $courseArray[] = Course::findIdentity($courseUserMap->course_id);
         }
         //IMAGINE THAT LATEST COURSE IS PICKED
-        
+
         $course = ArrayHelper::toArray($courseArray[0]);
         $tasks = Task::getAllByParentId($course);
         foreach ($tasks as $task) {
-          $event = new \yii2fullcalendar\models\Event();
-          $event->id = $task->id;
-          $event->title = $task->name;
-          $event->description = $task->description;
-          $event->start = $task->publish_date;
-          $events[] = $event;
+            if ($task->publish_date == null) continue;
+            $event = new \yii2fullcalendar\models\Event();
+            $event->id = $task->id;
+            $event->title = $task->name;
+            $event->description = $task->description;
+            $event->start = $task->publish_date;
+            $events[] = $event;
         }
 
         return $this->render('index', ['course' => $course, 'events' => $events]);
@@ -110,8 +111,8 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-          //  echo '<pre>';var_dump(Yii::$app->user);
-          //  die();
+            //  echo '<pre>';var_dump(Yii::$app->user);
+            //  die();
             return $this->goBack();
         }
         return $this->render('login', [
@@ -149,8 +150,9 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTest() {
-      $this->goHome();
-      die();
+    public function actionTest()
+    {
+        $this->goHome();
+        die();
     }
 }
