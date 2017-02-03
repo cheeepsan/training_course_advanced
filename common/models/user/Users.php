@@ -15,6 +15,7 @@ use Yii;
 class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
   public $user_id;
+
     /**
      * @inheritdoc
      */
@@ -28,8 +29,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function rules() {
         return [
-            [['password', 'authKey', 'accessToken', 'user_id'], 'string'],
+            [['password', 'authKey', 'accessToken', 'user_id', 'identityClass', 'identityCookie'], 'string'],
             [['signup', 'last_login'], 'safe'],
+            [['enableAutoLogin'], 'number']
         ];
     }
 

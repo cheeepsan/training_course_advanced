@@ -12,6 +12,7 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'components' => [
+
         'log' => [
             'targets' => [
                 [
