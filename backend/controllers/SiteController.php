@@ -82,18 +82,20 @@ class SiteController extends Controller
             $courseArray[] = Course::findIdentity($courseUserMap->course_id);
         }
         //IMAGINE THAT LATEST COURSE IS PICKED
-        
-        $course = ArrayHelper::toArray($courseArray[0]);
-        $tasks = Task::getAllByParentId($course);
-        foreach ($tasks as $task) {
-          $event = new \yii2fullcalendar\models\Event();
-          $event->id = $task->id;
-          $event->title = $task->name;
-          $event->description = $task->description;
-          $event->start = $task->publish_date;
-          $events[] = $event;
+        if (!empty($courseArray)) {
+            $course = ArrayHelper::toArray($courseArray[0]);
+            $tasks = Task::getAllByParentId($course);
+            foreach ($tasks as $task) {
+                $event = new \yii2fullcalendar\models\Event();
+                $event->id = $task->id;
+                $event->title = $task->name;
+                $event->description = $task->description;
+                $event->start = $task->publish_date;
+                $events[] = $event;
+            }
+        } else {
+            $course = NULL;
         }
-
         return $this->render('index', ['course' => $course, 'events' => $events]);
     }
 
