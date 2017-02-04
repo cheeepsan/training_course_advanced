@@ -2,7 +2,7 @@
 
 namespace common\models\course;
 use Yii;
-
+use common\models\task\TaskSubmit;
 /**
  * This is the model class for table "tbl_course_user_map".
  *
@@ -45,7 +45,15 @@ class CourseUserMap extends \yii\db\ActiveRecord
             'permission_write' => 'Permission Write',
         ];
     }
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
 
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function findByUserId($id) {
       return CourseUserMap::find()->where(['id' => id])->one();
     }

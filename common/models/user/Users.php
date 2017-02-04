@@ -3,7 +3,9 @@
 namespace common\models\user;
 
 use Yii;
-
+use common\models\course\CourseUserMap;
+use common\models\user\User;
+use common\models\task\TaskSubmit;
 /**
  * This is the model class for table "tbl_user_users".
  *
@@ -115,6 +117,36 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         //$user->surname = $this->userLastname;
         $user->save();
       }
+    }
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            $courseUserMap = CourseUserMap::findAllByUserId($this->id);
+            $user = User::findIdentity($this->id);
+            $taskSubmits = TaskSubmit::getByUserId($user->id);
+            foreach ($taskSubmits as $taskSubmit) {
+                if ($taskSubmit->delete()) {
+
+                } else {
+                    return false;
+                }
+            }
+            foreach ($courseUserMap as $model) {
+                if ($model->delete()) {
+
+                } else {
+                    return false;
+                }
+            }
+            if ($user->delete()) {
+
+            } else {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
     public function getUser() {
       return $this->hasOne(User::className(), ['user_id' => 'id']);

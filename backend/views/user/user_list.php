@@ -48,13 +48,16 @@ echo GridView::widget([
         'attribute' => 'date_of_birth',
 
       ],
-      [
-        'label'  => 'link',
-        'format' => 'raw',
-        'value'  =>  function ($model) {
-                         return Html::a('view', ['user/view-user', 'id' => $model->id]);
-                     },
-      ]
+        [
+            'class' => '\kartik\grid\ActionColumn',
+            'deleteOptions' => [
+                'label' => '<i class="glyphicon glyphicon-remove"></i>',
+            ],
+            'viewOptions' => [
+                'style' => 'display: none',
+            ]
+
+        ],
 
     ]
 

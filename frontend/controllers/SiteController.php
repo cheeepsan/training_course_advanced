@@ -73,29 +73,32 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        $events = array();
+   {
+       $events = array();
 
-        $user = User::findByParent(Yii::$app->user->id);
-        $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
-        foreach ($courseUserMapArray as $courseUserMap) {
-            $courseArray[] = Course::findIdentity($courseUserMap->course_id);
-        }
-        //IMAGINE THAT LATEST COURSE IS PICKED
-
-        $course = ArrayHelper::toArray($courseArray[0]);
-        $tasks = Task::getAllByParentId($course);
-        foreach ($tasks as $task) {
-            if ($task->publish_date == null) continue;
-            $event = new \yii2fullcalendar\models\Event();
-            $event->id = $task->id;
-            $event->title = $task->name;
-            $event->description = $task->description;
-            $event->start = $task->publish_date;
-            $events[] = $event;
-        }
-
-        return $this->render('index', ['course' => $course, 'events' => $events]);
+       $user = User::findByParent(Yii::$app->user->id);
+       $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
+       foreach ($courseUserMapArray as $courseUserMap) {
+           $courseArray[] = Course::findIdentity($courseUserMap->course_id);
+       }
+       //IMAGINE THAT LATEST COURSE IS PICKED
+       if (!empty($courseArray)) {
+           $course = ArrayHelper::toArray($courseArray[0]);
+           $tasks = Task::getAllByParentId($course);
+           foreach ($tasks as $task) {
+               if ($task->publish_date == null) continue;
+               $event = new \yii2fullcalendar\models\Event();
+               $event->id = $task->id;
+               $event->title = $task->name;
+               $event->description = $task->description;
+               $event->start = $task->publish_date;
+               $events[] = $event;
+           }
+       } else {
+           $events = NULL;
+           $course = NULL;
+       }
+       return $this->render('index', ['course' => $course, 'events' => $events]);
     }
 
     /**

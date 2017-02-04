@@ -95,6 +95,7 @@ class SiteController extends Controller
             }
         } else {
             $course = NULL;
+            $events = NULL;
         }
         return $this->render('index', ['course' => $course, 'events' => $events]);
     }

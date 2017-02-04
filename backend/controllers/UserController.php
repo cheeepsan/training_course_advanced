@@ -69,7 +69,7 @@ class UserController extends Controller
       *
       * @return mixed
       */
-      public function actionViewUser($id) {
+      public function actionView($id) {
         $model = User::findIdentity($id);
         $modelPassword = new ChangePasswordForm();
         if (isset($_POST['delete'])) {
@@ -94,5 +94,19 @@ class UserController extends Controller
             'modelPassword' => $modelPassword,
         ]);
       }
+
+    public function actionDelete($id) {
+        $model = User::findIdentity($id);
+        $usersModel = $model->getUsers()->primaryModel;
+
+
+        if ($usersModel->delete()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'User deleted');
+            $this->redirect(['user/list-users']);
+        } else {
+            Yii::$app->session->setFlash('kv-detail-error', 'Error deleting user');
+            $this->redirect(['user/list-users']);
+        }
+    }
 
 }

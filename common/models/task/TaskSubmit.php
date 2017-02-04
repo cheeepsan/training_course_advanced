@@ -80,5 +80,7 @@ class TaskSubmit extends \yii\db\ActiveRecord
 
         return static::findOne(['parent_id' => $parentId]);
     }
-
+    public static function getByUserId($userId) {
+        return static::find()->where(['user_id' => $userId])->all();
+    }
 }
