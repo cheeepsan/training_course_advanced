@@ -3,38 +3,84 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
-
+use console\rbac\UserGroupRule;
 class RbacController extends Controller
 {
     public function actionInit()
     {
-        $auth = Yii::$app->authManager;
+        $authManager = \Yii::$app->authManager;
 
-        // add "createPost" permission
-        $createPost = $auth->createPermission('createPost');
-        $createPost->description = 'Create a post';
-        $auth->add($createPost);
+        // Create roles
+        $guest  = $authManager->createRole('guest');
+        $user  = $authManager->createRole('user');
+        $admin  = $authManager->createRole('admin');
 
-        // add "updatePost" permission
-        $updatePost = $auth->createPermission('updatePost');
-        $updatePost->description = 'Update post';
-        $auth->add($updatePost);
+        // Create simple, based on action{$NAME} permissions
+        $login  = $authManager->createPermission('login');
+        $logout = $authManager->createPermission('logout');
+        $error  = $authManager->createPermission('error');
+        $signUp = $authManager->createPermission('sign-up');
+        $index  = $authManager->createPermission('index');
+        $view   = $authManager->createPermission('view');
+        $update = $authManager->createPermission('update');
+        $delete = $authManager->createPermission('delete');
 
-        // add "author" role and give this role the "createPost" permission
-        $author = $auth->createRole('author');
-        $auth->add($author);
-        $auth->addChild($author, $createPost);
+        $calendarC = $authManager->createPermission('calendar/*');
+        $siteC = $authManager->createPermission('site/*');
+        $courseC = $authManager->createPermission('course/*');
+        $taskC = $authManager->createPermission('task/*');
+        $userC = $authManager->createPermission('user/*');
+        // Add permissions in Yii::$app->authManager
+        $authManager->add($login);
+        $authManager->add($logout);
+        $authManager->add($error);
+        $authManager->add($signUp);
+        $authManager->add($index);
+        $authManager->add($view);
+        $authManager->add($update);
+        $authManager->add($delete);
+        $authManager->add($calendarC);
+        $authManager->add($siteC);
+        $authManager->add($courseC);
+        $authManager->add($taskC);
+        $authManager->add($userC);
 
-        // add "admin" role and give this role the "updatePost" permission
-        // as well as the permissions of the "author" role
-        $admin = $auth->createRole('admin');
-        $auth->add($admin);
-        $auth->addChild($admin, $updatePost);
-        $auth->addChild($admin, $author);
 
-        // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
-        // usually implemented in your User model.
-        $auth->assign($author, 2);
-        $auth->assign($admin, 1);
+        // Add rule, based on UserExt->group === $user->group
+        $userGroupRule = new UserGroupRule();
+        $authManager->add($userGroupRule);
+
+        // Add rule "UserGroupRule" in roles
+        $guest->ruleName  = $userGroupRule->name;
+        $user->ruleName  = $userGroupRule->name;
+        $admin->ruleName  = $userGroupRule->name;
+
+        // Add roles in Yii::$app->authManager
+        $authManager->add($guest);
+        $authManager->add($user);
+        $authManager->add($admin);
+
+        // Add permission-per-role in Yii::$app->authManager
+        // Guest
+        $authManager->addChild($guest, $login);
+        $authManager->addChild($guest, $error);
+
+        // User
+        $authManager->addChild($user, $update);
+        $authManager->addChild($user, $logout);
+        $authManager->addChild($user, $signUp);
+        $authManager->addChild($user, $index);
+        $authManager->addChild($user, $view);
+        $authManager->addChild($user, $guest);
+        $authManager->addChild($user, $calendarC);
+        $authManager->addChild($user, $siteC);
+        $authManager->addChild($user, $courseC);
+        $authManager->addChild($user, $taskC);
+        $authManager->addChild($user, $userC);
+
+        // Admin
+        $authManager->addChild($admin, $delete);
+        $authManager->addChild($admin, $user);
+
     }
 }

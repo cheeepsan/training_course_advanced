@@ -14,7 +14,7 @@ use common\models\user\User;
 use common\models\course\CourseUserMap;
 use yii\helpers\ArrayHelper;
 use common\models\task\TaskSubmit;
-class TaskController extends Controller
+class TaskController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc

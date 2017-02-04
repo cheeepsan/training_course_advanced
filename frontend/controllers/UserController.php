@@ -14,7 +14,7 @@ use common\models\ContactForm;
 use common\models\user\AddUserForm;
 use common\models\user\UserSearch;
 
-class UserController extends Controller
+class UserController extends \common\controllers\MainController
 {
 
 

@@ -10,7 +10,7 @@ use common\models\news\NewsSearch;
 use common\models\news\News;
 use yii\helpers\ArrayHelper;
 
-class NewsController extends Controller
+class NewsController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc

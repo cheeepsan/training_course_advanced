@@ -31,8 +31,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function rules() {
         return [
-            [['password', 'authKey', 'accessToken', 'user_id', 'identityClass', 'identityCookie'], 'string'],
+            [['password', 'authKey', 'accessToken', 'user_id', 'identityClass', 'identityCookie', 'group'], 'string'],
             [['signup', 'last_login'], 'safe'],
+
             [['enableAutoLogin'], 'number']
         ];
     }
@@ -142,6 +143,18 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
             } else {
                 return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            if ($this->isNewRecord) {
+                $this->group = 'user';
             }
             return true;
         } else {

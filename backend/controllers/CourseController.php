@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 use common\models\task\Task;
 use common\models\task\TaskSearch;
 
-class CourseController extends Controller
+class CourseController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc

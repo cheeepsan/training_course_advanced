@@ -32,6 +32,7 @@ class AddUserForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            ['username', 'email'],
             // rememberMe must be a boolean value
           //  ['rememberMe', 'boolean'],
             // password is validated by validatePassword()

@@ -17,31 +17,47 @@ use common\models\course\CourseUserMap;
 use common\models\course\Course;
 use yii\helpers\ArrayHelper;
 use common\models\task\Task;
+use yii\web\ForbiddenHttpException;
 
-class SiteController extends Controller
+class SiteController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc
      */
+   // public function beforeAction($action)
+   // {
+//
+   //     if (parent::beforeAction($action)) {
+//
+   //         if (!\Yii::$app->user->can($action->id)) {
+//
+   //             throw new ForbiddenHttpException('Access denied');
+   //         }
+   //         return true;
+   //     } else {
+   //         return false;
+   //     }
+   // }
+
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'index'],
-                'rules' => [
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['login'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
+            //'access' => [
+            //    'class' => AccessControl::className(),
+            //    'only' => ['logout', 'login', 'index'],
+            //    'rules' => [
+            //        [
+            //            'actions' => ['logout', 'index'],
+            //            'allow' => true,
+            //            'roles' => ['@'],
+            //        ],
+            //        [
+            //            'actions' => ['login'],
+            //            'allow' => true,
+            //            'roles' => ['?'],
+            //        ],
+            //    ],
+            //],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -72,33 +88,37 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-   {
-       $events = array();
+    public function actionIndex()//
+    {
+        if (\Yii::$app->getUser()->isGuest) {
 
-       $user = User::findByParent(Yii::$app->user->id);
-       $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
-       foreach ($courseUserMapArray as $courseUserMap) {
-           $courseArray[] = Course::findIdentity($courseUserMap->course_id);
-       }
-       //IMAGINE THAT LATEST COURSE IS PICKED
-       if (!empty($courseArray)) {
-           $course = ArrayHelper::toArray($courseArray[0]);
-           $tasks = Task::getAllByParentId($course);
-           foreach ($tasks as $task) {
-               if ($task->publish_date == null) continue;
-               $event = new \yii2fullcalendar\models\Event();
-               $event->id = $task->id;
-               $event->title = $task->name;
-               $event->description = $task->description;
-               $event->start = $task->publish_date;
-               $events[] = $event;
-           }
-       } else {
-           $events = NULL;
-           $course = NULL;
-       }
-       return $this->render('index', ['course' => $course, 'events' => $events]);
+            return $this->redirect(['site/login']);
+        }
+        $events = array();
+
+        $user = User::findByParent(Yii::$app->user->id);
+        $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
+        foreach ($courseUserMapArray as $courseUserMap) {
+            $courseArray[] = Course::findIdentity($courseUserMap->course_id);
+        }
+        //IMAGINE THAT LATEST COURSE IS PICKED
+        if (!empty($courseArray)) {
+            $course = ArrayHelper::toArray($courseArray[0]);
+            $tasks = Task::getAllByParentId($course);
+            foreach ($tasks as $task) {
+                if ($task->publish_date == null) continue;
+                $event = new \yii2fullcalendar\models\Event();
+                $event->id = $task->id;
+                $event->title = $task->name;
+                $event->description = $task->description;
+                $event->start = $task->publish_date;
+                $events[] = $event;
+            }
+        } else {
+            $events = NULL;
+            $course = NULL;
+        }
+        return $this->render('index', ['course' => $course, 'events' => $events]);
     }
 
     /**
@@ -108,7 +128,9 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+
         if (!Yii::$app->user->isGuest) {
+
             return $this->goHome();
         }
 
@@ -132,7 +154,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect(['site/login']);
     }
 
     /**

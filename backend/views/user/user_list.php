@@ -54,7 +54,7 @@ echo GridView::widget([
                 'label' => '<i class="glyphicon glyphicon-remove"></i>',
             ],
             'viewOptions' => [
-                'style' => 'display: none',
+                //'style' => 'display: none',
             ]
 
         ],

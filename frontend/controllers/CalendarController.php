@@ -14,7 +14,7 @@ use common\models\user\UserSearch;
 use yii\helpers\ArrayHelper;
 use common\models\task\Task;
 use common\models\task\TaskSearch;
-class CalendarController extends Controller {
+class CalendarController extends \common\controllers\MainController {
 
   public function actionIndex() {
     $tasks = Task::find()->all();

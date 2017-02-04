@@ -12,7 +12,7 @@ use common\models\task\AddTaskForm;
 use common\models\task\Task;
 use common\models\task\TaskSearch;
 use yii\web\UploadedFile;
-class TaskController extends Controller
+class TaskController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc

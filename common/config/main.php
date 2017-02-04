@@ -5,7 +5,7 @@ return [
         'authManager' => [
             //'class' => 'yii\rbac\PhpManager',
             'class' => 'yii\rbac\DbManager',
-            'defaultRoles' => ['guest'],
+            'defaultRoles' => ['admin', 'user', 'guest'],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -22,7 +22,17 @@ return [
             'identityClass' => 'yii\web\User',
             'class' => 'yii\web\User',
             'enableAutoLogin' => true,
+            //'loginUrl' => ['site/login'],
         ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [
+                // ...
+            ],
+        ],
+
 
     ],
 	'modules' => [

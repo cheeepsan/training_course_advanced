@@ -18,7 +18,7 @@ use common\models\course\Course;
 use yii\helpers\ArrayHelper;
 use common\models\task\Task;
 
-class SiteController extends Controller
+class SiteController extends \common\controllers\MainController
 {
     /**
      * @inheritdoc
@@ -26,22 +26,7 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'index'],
-                'rules' => [
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['login'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
+
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -74,6 +59,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (\Yii::$app->getUser()->isGuest) {
+
+            return $this->redirect(['site/login']);
+        }
         $events = array();
         
         $user = User::findByParent(Yii::$app->user->id);

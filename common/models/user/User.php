@@ -32,7 +32,8 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'weight'], 'integer'],
+            [['user_id'], 'integer'],
+            [['weight'], 'number'],
             [['active'], 'boolean'],
             [['date_of_birth'], 'safe'],
             [['groups'], 'string'],
