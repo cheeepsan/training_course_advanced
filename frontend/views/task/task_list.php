@@ -55,6 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     $user = User::getUserFromIdentity();
                     $submit = TaskSubmit::find()->where(['user_id' => $user->id, 'parent_id' => $model->id])->one();
+                    if ($submit == NULL) {
+                        return '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
+                    }
                     $isDone = $submit->done;
                     if ($isDone) {
                         return '<i class="fa fa-check-square-o" aria-hidden="true"></i>';

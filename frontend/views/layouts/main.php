@@ -52,14 +52,24 @@ AppAsset::register($this);
                 'label' => 'All assigments',
                 'url' => ['/task/list-all-tasks'],
               ],
-
+              [
+                  'label' => Yii::$app->user->identity->username,
+                  'url' => ['/user/view-user', 'id' => Yii::$app->user->identity->id],
+                 // 'items' => [
+                 //     [
+                 //         'label' => 'Edit user',
+                 //
+                 //     ],
+//
+                 // ],
+              ],
               Yii::$app->user->isGuest ? (
                   ['label' => 'Login', 'url' => ['/site/login']]
               ) : (
                   '<li>'
                   . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
                   . Html::submitButton(
-                      'Logout (' . Yii::$app->user->identity->username . ')',
+                      'Logout ',
                       ['class' => 'btn btn-link']
                   )
                   . Html::endForm()

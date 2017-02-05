@@ -14,6 +14,8 @@ use common\models\user\User;
 use common\models\course\CourseUserMap;
 use yii\helpers\ArrayHelper;
 use common\models\task\TaskSubmit;
+use yii\web\ForbiddenHttpException;
+
 class TaskController extends \common\controllers\MainController
 {
     /**
@@ -51,8 +53,12 @@ class TaskController extends \common\controllers\MainController
 
         }
         //IMAGINE THAT LATEST COURSE IS PICKED
+        if (empty($courseArray)) {
+            return $this->render('empty');
 
-        $course = $courseArray[0];
+        } else {
+            $course = $courseArray[0];
+        }
 
         return $this->render('task_list', [
             'searchModel' => $searchModel,
@@ -62,61 +68,21 @@ class TaskController extends \common\controllers\MainController
     }
 
 
-    public function actionNewTask()
-    {
-        $model = new AddTaskForm();
-        if ($model->load(Yii::$app->request->post()) && $model->addNewTask()) {
-            Yii::$app->session->setFlash('success', 'Task created');
-
-        }
-        return $this->render('addTask', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionNewTaskFromParent($parent_id)
-    {
-        $model = new AddTaskForm();
-        $model->parent_id = $parent_id;
-        if ($model->load(Yii::$app->request->post()) && $model->addNewTask()) {
-            Yii::$app->session->setFlash('success', 'Task created');
 
 
-        }
-        return $this->render('addTask', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays users
-     *
-     * @return mixed
-     */
-    public function actionViewTask($id)
-    {
-        $nameIdMap = array();
-        $initialData = array();
-
-        $model = Task::findIdentity($id);
-
-        return $this->render('task_view', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionIndex()
-    {
-
-
-    }
 
     public function actionCompleteTask($id = NULL) {
-        //if ($id == NULL) {
 
-        //}
         $model = TaskSubmit::findIdentity($id);
+        if ($model == NULL) {
+            return $this->redirect(['task/list-all-tasks']);
+        }
+        if (\Yii::$app->user->identity->id !== (int)$model->user_id) {
+            throw new ForbiddenHttpException('No access');
+        }
         $task = Task::findIdentity($model->parent_id);
+
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->done = 1;
