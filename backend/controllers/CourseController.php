@@ -11,6 +11,7 @@ use common\models\course\CourseSearch;
 use common\models\course\Course;
 use common\models\course\CourseUserMap;
 use common\models\user\UserSearch;
+use common\models\user\User;
 use yii\helpers\ArrayHelper;
 use common\models\task\Task;
 use common\models\task\TaskSearch;
@@ -85,7 +86,7 @@ class CourseController extends \common\controllers\MainController
         $taskDataProvider = $taskSearch->search(Yii::$app->request->queryParams, ['parent_id' => $id]);
 
 
-        if ($model->load(Yii::$app->request->post())) { //TODO HANDLE DATA BETTER, NOT THIS SHIT
+        if ($model->load(Yii::$app->request->post())) {
             $mapArray = CourseUserMap::findByCourseId($id);
             $toDelete = array();
             $toPersist = array();
@@ -112,8 +113,16 @@ class CourseController extends \common\controllers\MainController
                 //delete data form map
 
                 foreach ($toDelete as $key => $user_id) {
-                    if (CourseUserMap::findByCourseUserId($id, $user_id)) {
-                        CourseUserMap::findByCourseUserId($id, $user_id)->delete();
+                    $mapToDelete = CourseUserMap::findByCourseUserId($id, $user_id);
+                    if ($mapToDelete != NULL) {
+
+                        if ($mapToDelete->delete()) {
+                            $user = User::findIdentity($user_id);
+                            if ($user != NULL) {
+                                $user->current_course = NULL;
+                                $user->save();
+                            }
+                        }
                     }
                 }
                 //add data
@@ -123,7 +132,12 @@ class CourseController extends \common\controllers\MainController
                         $mapData = new CourseUserMap();
                         $mapData->course_id = $id;
                         $mapData->user_id = $user_id;
-                        $mapData->save();
+                        if ($mapData->save()) {
+                            $user = User::findOne(['id' => $user_id]);
+                            $user->current_course = $id;
+                            $user->save();
+                        }
+
                     }
                 }
                 Yii::$app->session->setFlash('kv-detail-success', 'Changes saved');

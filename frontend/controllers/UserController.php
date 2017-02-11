@@ -41,11 +41,12 @@ class UserController extends \common\controllers\MainController
      *
      * @return mixed
      */
-    public function actionViewUser($id) {
+    public function actionViewUser() {
 
-        if (\Yii::$app->user->identity->id !== (int)$id) {
-            throw new ForbiddenHttpException('No access');
-        }
+        //if (\Yii::$app->user->identity->id !== (int)$id) {
+        //    throw new ForbiddenHttpException('No access');
+        //}
+        $id = \Yii::$app->user->identity->id;
         $model = User::findByParent($id);
         $modelPassword = new ChangePasswordForm();
         if (isset($_POST['delete'])) {
@@ -53,8 +54,16 @@ class UserController extends \common\controllers\MainController
         }
 
         if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+
             Yii::$app->session->setFlash('kv-detail-success', 'Changes saved');
-            $model->save();
+            if ($model->save()) {
+                //echo '<pre>';var_dump($model);die();
+            } else {
+                //echo '<pre>';var_dump($model->getErrors());die();
+            }
+            $this->redirect(['user/view-user']);
+        } else {
+
         }
 
         if ($modelPassword->load(Yii::$app->request->post())) {

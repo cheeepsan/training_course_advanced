@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use kartik\detail\DetailView;
 use yii\helpers\Url;
+
 $this->title = 'User view';
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,41 +29,47 @@ echo DetailView::widget([
         'params' => ['id' => 1000, 'kvdelete'=>true],
     ],*/
     'panel' => [
-      'type' => 'primary',
-      'heading' => 'User: ' .$model->users->username,
-      'editable' => false,
+        'type' => 'primary',
+        'heading' => 'User: ' . $model->users->username,
+        'editable' => false,
     ],
-    'container' => ['id'=>'kv-demo'],
+    'container' => ['id' => 'kv-demo'],
     'formOptions' => ['action' => Url::current(['#' => 'save'])], // your action to delete
     'attributes' => [
-            [
-                'attribute'=>'name',
+        [
+            'attribute' => 'name',
 
 
+        ],
+        [
+            'attribute' => 'surname',
+            'format' => 'raw',
+
+
+        ],
+        [
+            'attribute' => 'weight',
+            'format' => 'raw',
+
+
+        ],
+        [
+            'attribute' => 'date_of_birth',
+            'format' => 'date',
+            'type' => DetailView::INPUT_DATE,
+            'widgetOptions' => [
+                'pluginOptions' => ['format' => 'yyyy-mm-dd']
             ],
-            [
-                'attribute'=>'surname',
-                'format'=>'raw',
-
-
-            ],
-            [
-                'attribute'=>'weight',
-                'format'=>'raw',
-
-
-            ],
-            [
-                'attribute'=>'date_of_birth',
-                'format'=>'date',
-                 'type'=>DetailView::INPUT_DATE,
-                 'widgetOptions' => [
-                     'pluginOptions'=>['format'=>'yyyy-mm-dd']
-                 ],
-                 'valueColOptions'=>['style'=>'width:30%']
-            ],
+            'valueColOptions' => ['style' => 'width:30%']
+        ],
     ],
 ]);
-  echo $this->render('_changePassword', ['model' => $modelPassword]);
-  echo Html::submitButton('Delete user', ['name' => 'delete', 'class' => 'btn btn-danger', 'action' => 'site/userView']); 
+echo $this->render('_changePassword', ['model' => $modelPassword]);
+
+
+echo Yii::$app->controller->renderPartial('_user_measurements_list', [
+    'measurementsSearch' => $measurementsSearch,
+    'measurementsDataProvider' => $measurementsDataProvider,
+    'model' => $model,
+]);
 ?>

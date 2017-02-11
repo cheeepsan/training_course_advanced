@@ -21,10 +21,12 @@ class CalendarController extends \common\controllers\MainController  {
     $events = array();
 
     foreach ($tasks as $task) {
+        if ($task->publish_date == null) continue;
       $event = new \yii2fullcalendar\models\Event();
       $event->id = $task->id;
       $event->title = $task->name;
       $event->description = $task->description;
+
       $event->start = $task->publish_date;
       $events[] = $event;
     }

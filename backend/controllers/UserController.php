@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\measurements\MeasurementsSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -34,7 +35,10 @@ class UserController extends \common\controllers\MainController
         ];
     }
 
+    public function actionUpdate($id) {
+        $this->redirect(['measurements/create', 'userId' => $id]);
 
+    }
     public function actionNewUser() {
         $model = new AddUserForm();
 
@@ -72,6 +76,10 @@ class UserController extends \common\controllers\MainController
       public function actionView($id) {
         $model = User::findIdentity($id);
         $modelPassword = new ChangePasswordForm();
+        $measurementsSearch = new MeasurementsSearch();
+        $measurementsSearch->parent_id = $id;
+        $measurementsDataProvider = $measurementsSearch->search(Yii::$app->request->queryParams, ['parent_id' => $id]);
+
         if (isset($_POST['delete'])) {
 
         }
@@ -92,6 +100,8 @@ class UserController extends \common\controllers\MainController
         return $this->render('user_view', [
             'model' => $model,
             'modelPassword' => $modelPassword,
+            'measurementsSearch' => $measurementsSearch,
+            'measurementsDataProvider' => $measurementsDataProvider
         ]);
       }
 

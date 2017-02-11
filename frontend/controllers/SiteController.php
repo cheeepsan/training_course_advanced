@@ -95,15 +95,11 @@ class SiteController extends \common\controllers\MainController
             return $this->redirect(['site/login']);
         }
         $events = array();
-
+        $course = NULL;
         $user = User::findByParent(Yii::$app->user->id);
-        $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
-        foreach ($courseUserMapArray as $courseUserMap) {
-            $courseArray[] = Course::findIdentity($courseUserMap->course_id);
-        }
-        //IMAGINE THAT LATEST COURSE IS PICKED
-        if (!empty($courseArray)) {
-            $course = ArrayHelper::toArray($courseArray[0]);
+        $course = Course::findIdentity($user->current_course);
+        if ($course != NULL) {
+
             $tasks = Task::getAllByParentId($course);
             foreach ($tasks as $task) {
                 if ($task->publish_date == null) continue;
@@ -116,7 +112,7 @@ class SiteController extends \common\controllers\MainController
             }
         } else {
             $events = NULL;
-            $course = NULL;
+
         }
         return $this->render('index', ['course' => $course, 'events' => $events]);
     }

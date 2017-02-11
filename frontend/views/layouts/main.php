@@ -54,7 +54,7 @@ AppAsset::register($this);
               ],
               [
                   'label' => Yii::$app->user->identity->username,
-                  'url' => ['/user/view-user', 'id' => Yii::$app->user->identity->id],
+                  'url' => ['/user/view-user'],
                  // 'items' => [
                  //     [
                  //         'label' => 'Edit user',

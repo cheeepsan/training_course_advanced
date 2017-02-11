@@ -33,10 +33,10 @@ class User extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['weight'], 'number'],
-            [['active'], 'boolean'],
+            [['weight', 'phone', 'current_course'], 'number'],
+            [['active', 'sex'], 'boolean'],
             [['date_of_birth'], 'safe'],
-            [['groups'], 'string'],
+            [['groups', 'facebook', 'instagram'], 'string'],
             [['name', 'surname'], 'string', 'max' => 255],
         ];
     }
@@ -54,6 +54,9 @@ class User extends \yii\db\ActiveRecord
             'weight' => 'Weight',
             'date_of_birth' => 'Date Of Birth',
             'groups' => 'Groups',
+            'sex' => 'Sex',
+            'phone' => 'Phone',
+
         ];
     }
     /**

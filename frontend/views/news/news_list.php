@@ -3,57 +3,39 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
-use app\controllers\SiteController;
-use app\models\Users;
-use app\models\UserSearch;
+use yii\widgets\ListView;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 
-$this->title = 'List courses';
+$this->title = 'News';
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-<?php
 
-echo GridView::widget([
-    'dataProvider'=> $dataProvider,
-    'filterModel' => $searchModel,
-    //'columns' => $gridColumns,
-    'responsive'=>true,
-    'hover'=>true,
-    'columns' => [
 
-      [
-        'attribute' => 'name',
+<div class="row news-row">
 
-      ],
-      [
-        'attribute' => 'status',
+<div class="col-md-12">
+<?=
+ListView::widget([
+    'dataProvider' => $dataProvider,
+    'summary'=>'',
+    'options' => [
+        'tag' => 'div',
+        'class' => 'list-wrapper',
+        'id' => 'list-wrapper',
+    ],
+    'itemView' => function ($model) {
+        return $this->render('_news_item',['model' => $model]);
 
-      ],
-      [
-        'attribute' => 'create_date',
-
-      ],
-      [
-        'attribute' => 'publish_date',
-
-      ],
-      [
-        'label'  => 'link',
-        'format' => 'raw',
-        'value'  =>  function ($model) {
-                         return Html::a('view', ['news/view', 'id' => $model->id]);
-                     },
-      ]
-
-    ]
-
+    },
 ]);
 ?>
+</div>
+</div>
 </div>

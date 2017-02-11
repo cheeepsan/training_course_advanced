@@ -46,18 +46,14 @@ class TaskController extends \common\controllers\MainController
     {
         $searchModel = new TaskSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $user = User::findByParent(Yii::$app->user->id);
-        $courseUserMapArray = CourseUserMap::findAllByUserId($user->id);
-        foreach ($courseUserMapArray as $courseUserMap) {
-            $courseArray[] = Course::findIdentity($courseUserMap->course_id);
 
-        }
-        //IMAGINE THAT LATEST COURSE IS PICKED
-        if (empty($courseArray)) {
+        $course = NULL;
+        $user = User::findByParent(Yii::$app->user->id);
+        $course = Course::findIdentity($user->current_course);
+
+        if ($course == NULL) {
             return $this->render('empty');
 
-        } else {
-            $course = $courseArray[0];
         }
 
         return $this->render('task_list', [
